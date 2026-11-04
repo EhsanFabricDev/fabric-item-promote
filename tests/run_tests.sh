@@ -53,6 +53,8 @@ git_quiet push origin develop test main feature/sales-refresh
 # --- Run the cases -----------------------------------------------------------
 run_case() {  # run_case <name> <expected exit> <expected output regex> <source> <target> <items>
   local name="$1" expected_exit="$2" expected_output="$3" output actual_exit=0
+  # Start each case clean: a blocked case leaves its copied folders staged.
+  git reset --quiet --hard && git clean -fdq
   git checkout --quiet --detach origin/develop
   output="$(SOURCE_BRANCH="$4" TARGET_BRANCH="$5" ITEM_LIST="$6" DRY_RUN=true \
     ENFORCE_PROMOTION_ORDER=true PROMOTION_ORDER="develop=*;test=develop;main=test" \
